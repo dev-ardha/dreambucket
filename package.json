@@ -1,0 +1,37 @@
+{
+  "name": "dreambucket",
+  "version": "1.0.0",
+  "description": "Web based bucket list app to manage a list of things to do before you expire.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon server",
+    "build": "next build",
+    "start": "NODE_ENV=production node server"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@emotion/core": "^10.0.35",
+    "@emotion/styled": "^10.0.27",
+    "axios": "^0.20.0",
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "express-session": "^1.17.1",
+    "mongoose": "^5.10.5",
+    "next": "^9.5.3",
+    "nprogress": "^0.2.0",
+    "passport": "^0.4.1",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-icons": "^3.11.0",
+    "sass": "^1.26.10",
+    "uid-safe": "^2.1.5"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  },
+  "engines": {
+    "node": "10.16.3"
+  }
+}
