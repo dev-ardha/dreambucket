@@ -8,7 +8,7 @@ function Navbar(){
 
     return(
         <StyledNavbar>
-            <div className="nav-center">
+            <div className="nav-brand">
                 <Link href="/">
                 <a>DreamBuckets</a>
                 </Link>
@@ -26,11 +26,8 @@ function Navbar(){
                             <Link activeclassname="active" href="/inbox">
                                 <a className="nav-icon icon-inbox" activeclassname="active"><HiOutlineMail/></a>
                             </Link>
-                            <Link activeclassname="active" href="/profile">
+                            <Link activeclassname="active" href="/ardhayudhatama">
                                 <a className="nav-icon icon-profile" activeclassname="active"><HiOutlineUser/></a>
-                            </Link>
-                            <Link href="/login">
-                                <a><Button className="primary">Log In</Button></a>
                             </Link>
                             {/* <Button className="primary" onClick={() => deauthenticate()}>Log Out</Button> */}
                         </>
@@ -50,7 +47,7 @@ const StyledNavbar = styled.nav`
     width:100%;
     height:60px;
     padding: 0 160px;
-    border-bottom:1px solid #eee;
+    border-bottom:1px solid #ddd;
 
     box-sizing:border-box;
     display:flex;
@@ -159,11 +156,7 @@ const StyledNavbar = styled.nav`
     .primary{
         margin-left:2rem;
     }
-    .nav-center{
-        position:absolute;
-        left:0;
-        right:0;
-        text-align:center;
+    .nav-brand{
         font-family: 'Leckerli One', cursive;
 
         a{

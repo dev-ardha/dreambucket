@@ -5,8 +5,9 @@ const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
 const handle = app.getRequestHandler();
 const uid = require('uid-safe');
-const passport = require("passport");
 const session = require("express-session");
+const ApolloServer = require('apollo-server-express').ApolloServer
+const schema = require('../server/graphql/schema')
 
 const feed = require('./api/feed')
 
@@ -25,6 +26,17 @@ app.prepare()
             saveUninitialized: true
         };
         server.use(session(sessionConfig));
+
+        // Setup Apollo Server
+        const apollo = new ApolloServer({
+            schema,
+            context: ({ req, res }) => ({ req, res }),
+        });
+
+        apollo.applyMiddleware({
+            app: server,
+            path: '/api/graphql'
+        });
 
         server.use(feed);
 

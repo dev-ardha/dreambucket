@@ -2,6 +2,24 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
+const followerSchema = new Schema({
+	followersUsernme: {
+		type: String,
+    },
+    acc: {
+        type: Boolean
+    }
+});
+
+const followingSchema = new Schema({
+	followingUsernme: {
+		type: String,
+    },
+    acc: {
+        type: Boolean
+    }
+});
+
 const userSchema = new Schema({
     fullname: { 
         type: String,
@@ -10,6 +28,10 @@ const userSchema = new Schema({
     username: {
         type: String,
         required: true
+    },
+    verified: {
+        type: Boolean,
+        default: false
     },
 	email: {
 		type: String,
@@ -22,7 +44,19 @@ const userSchema = new Schema({
 		minlength: 8
     },
     photo: {
-        type: String
+        type: String,
+        default: ''
+    },
+    social_login: {
+        googleID: { type: String, default: '' },
+    },
+    followers: {
+        type: [followerSchema],
+        sparse: true
+    },
+    following:{
+        type: [followingSchema],
+        sparse: true
     }
 }, {
     timestamps: true,

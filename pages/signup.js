@@ -4,17 +4,41 @@ import Input from '../components/shared/form/Input'
 import Link from 'next/link'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
+import { addUser } from '../lib/make-request'
+import { useState } from 'react'
+import FormMessage from '../components/shared/form/FormMessage'
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core'
 
 function Signup(){
     const router = useRouter();
+    const [error, setError] = useState()
 
     async function handleSubmit(event){
         event.preventDefault();
+        setError("")
 
-        await router.push('')
+        const fullname = event.currentTarget.elements.fullname
+        const username = event.currentTarget.elements.username
+        const email = event.currentTarget.elements.email
+        const password = event.currentTarget.elements.password
+
+        try {
+            console.log('loading')
+            const { data } = await addUser(fullname.value, username.value, email.value, password.value)
+
+            if(data.data.register){
+                console.log(data.data)
+                router.push('/')
+            }else{
+                setError(data.errors[0].message)
+                console.log(data.errors[0])
+            }
+
+        } catch (error) {
+            console.log('error', error)
+        }
     }
 
     return(
@@ -27,7 +51,6 @@ function Signup(){
                     width:0% !important;
                 }
             `}>
-
             </div>
             <div className="page-right" css={css`
                 @media (max-width: 1024px) {
@@ -36,6 +59,7 @@ function Signup(){
             `}>
                 <form onSubmit={handleSubmit}>
                     <h1>Sign Up</h1>
+                    {error ? <FormMessage msg={error} style="error"/> : ''}
                     <div className="field">
                         <Input type="text" placeholder="Full Name" name="fullname"/>
                     </div>
