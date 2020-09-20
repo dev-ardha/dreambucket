@@ -39,6 +39,10 @@ function StoryList(){
 }
 
 const StoryListStyled = Styled.section`
+    box-shadow: 0 1px 2px rgb(0,0,0,0.2);
+    background:#fff;
+    padding:1rem;
+    border-radius:8px;
 
     .section-title{
         display:flex;
@@ -47,6 +51,7 @@ const StoryListStyled = Styled.section`
 
         h2{
             margin:0;
+            font-size:1.3rem;
         }
         .icon{
             font-size:2.5rem;
@@ -56,11 +61,12 @@ const StoryListStyled = Styled.section`
     ul{
         display:flex;
         flex-direction:column;
+        margin: 1rem 0 0 0;
 
         li{
             padding:1rem 2rem;
             box-sizing: border-box;
-            border:1px solid #ddd;
+            border:1px solid #eee;
             width:100%;
             display:flex;
             align-items:center;

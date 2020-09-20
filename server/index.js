@@ -9,8 +9,6 @@ const session = require("express-session");
 const ApolloServer = require('apollo-server-express').ApolloServer
 const schema = require('../server/graphql/schema')
 
-const feed = require('./api/feed')
-
 app.prepare()
     .then(()=> {
         const server = express();
@@ -37,8 +35,6 @@ app.prepare()
             app: server,
             path: '/api/graphql'
         });
-
-        server.use(feed);
 
         server.get('*', (req, res) => {
             return handle(req, res);

@@ -17,6 +17,7 @@ const ErrorPageStyled = styled.div`
     align-items:center;
     text-align:center;
     flex-direction:column;
+    padding-top:50px;
 
     h1{
         font-weight:800;

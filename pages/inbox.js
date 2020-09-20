@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import Error from '../components/shared/Error'
 
 function Inbox(){
-    const development = false;
+    const development = true;
     
     return(
         <Layout pageTitle="Inbox">
@@ -83,15 +83,17 @@ function Inbox(){
 }
 
 const InboxStyled = styled.div`
-    padding: 50px 160px;
+    padding: 0 160px;
     display:flex;
     flex-direction:row;
 
     .inbox-wrapper{
+        background:#fff;
         display:flex;
-        border:1px solid #eee;
+        box-shadow: 0 1px 2px rgb(0,0,0,0.2);
         width:100%;
         min-height:470px;
+        margin-top:50px;
 
         .message-box{
             position:relative;

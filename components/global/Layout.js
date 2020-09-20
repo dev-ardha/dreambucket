@@ -40,15 +40,16 @@ function Layout({pageTitle, children}){
                     min-height:80vh;
                 }
                 .alert{
-                    padding:.25rem 0;
+                    padding:.25rem 3rem;
+                    box-sizing:border-box;
                     display:flex;
-                    justify-content:center;
                     align-items:center;
                     background:#121212;
                     color:#fff;
+                    width:100%;
                     font-size:.9rem;
-                    text-align:center;
-                    position:relative;
+                    position:fixed;
+                    bottom:0;
                 }
                 .close{
                     display:flex;

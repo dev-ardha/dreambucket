@@ -3,16 +3,16 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const followerSchema = new Schema({
-	followersUsernme: {
+	followersUsername: {
 		type: String,
     },
     acc: {
-        type: Boolean
+        type: Boolean,
     }
 });
 
 const followingSchema = new Schema({
-	followingUsernme: {
+	followingUsername: {
 		type: String,
     },
     acc: {
@@ -57,7 +57,10 @@ const userSchema = new Schema({
     following:{
         type: [followingSchema],
         sparse: true
-    }
+    },
+    dreams:[
+        {type: mongoose.Schema.Types.ObjectId, ref:'Dream'}
+    ]
 }, {
     timestamps: true,
 })

@@ -30,7 +30,7 @@ function explore(){
 }
 
 const ExploreStyled = styled.div`
-    padding: 50px 160px;
+    padding: 0 160px;
     display:flex;
     flex-direction:column;
 
