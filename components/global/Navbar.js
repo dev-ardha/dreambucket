@@ -2,7 +2,7 @@ import styled from '@emotion/styled'
 import Button from '../shared/Button'
 import Link from '../shared/Link'
 import { HiOutlineGlobeAlt, HiOutlineUser, HiOutlineHome, HiOutlineMail } from 'react-icons/hi'
-import { getUsers } from '../../lib/make-request'
+import { getUsers } from '../../utils/user'
 import { useState } from 'react'
 
 function Navbar(){
@@ -312,6 +312,18 @@ const StyledNavbar = styled.nav`
 
         a{
             font-size:1.5rem;
+        }
+    }
+
+    @media (max-width: 800px){
+        padding:0;
+        
+        .nav-brand, .nav-right{
+            display:none;
+        }
+
+        .nav-center{
+            margin: 0 auto;
         }
     }
 `

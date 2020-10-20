@@ -61,7 +61,7 @@ const typeDefs = gql`
 
     type Mutation{
         register(fullname: String, email: String, password: String, username: String): returnAuth
-        login(username: String, password: String): returnAuth
+        login(email: String, password: String): returnAuth
         addDream(title: String, description: String, images: String, dreamer: String): Dream
         follow(id: String!, meId: String!): Boolean
     }

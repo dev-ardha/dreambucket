@@ -4,14 +4,37 @@ import Input from '../components/shared/form/Input'
 import Link from 'next/link'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
+import { useState } from 'react'
+import graphxios from '../lib/graphxios'
 
 function Login(){
     const router = useRouter();
+    const [errors, setErrors] = useState();
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
 
     async function handleSubmit(event){
         event.preventDefault();
 
-        await router.push('')
+        const mutation = `
+        mutation{
+            login(email: "${email}", password: "${password}"){
+                user{
+                    username
+                }
+            }
+        }
+        `
+
+        graphxios.request('http://localhost:3000/api/graphql', mutation).then( async ({data}) => {
+
+            if(data.errors){
+                return setErrors(data.errors[0].message)
+            }
+
+            console.log(data.data.login);
+            await router.push(`/${data.data.login.user.username}`)
+        }).catch(err => console.log(err))
     }
 
     return(
@@ -24,10 +47,10 @@ function Login(){
                 <form onSubmit={handleSubmit}>
                     <h1>Log In</h1>
                     <div className="field">
-                        <Input type="text" placeholder="Username" name="username"/>
+                        <Input type="email" placeholder="Email" name="email" onChange={(e) => setEmail(e.target.value)}/>
                     </div>
                     <div className="field">
-                        <Input type="password" placeholder="Password" name="password"/>
+                        <Input type="password" placeholder="Password" name="password" onChange={(e) => setPassword(e.target.value)}/>
                     </div>
                     <Button className="primary size-medium" type="submit">Log In</Button>
                     <Link

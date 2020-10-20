@@ -35,27 +35,6 @@ export const getUsers = async (query) => {
     return response
 }
 
-export const getCurrentUser = async (cookies) => {
-    let body =  { 
-        query: `
-            
-        `, 
-        variables: {}
-    }
-
-    let options = {
-        headers: {
-            'Content-Type': 'application/json',
-            withCredentials:true,
-            Cookie: cookies
-        }
-    }
-
-    const response = await axios.post('http://localhost:3000/api/graphql',body, options)
-
-    return response
-}
-
 export const getUser = async (username) => {
     let body =  { 
         query: `

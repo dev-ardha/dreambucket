@@ -6,34 +6,65 @@ const app = next({ dev });
 const handle = app.getRequestHandler();
 const uid = require('uid-safe');
 const session = require("express-session");
-const ApolloServer = require('apollo-server-express').ApolloServer
-const schema = require('../server/graphql/schema')
+const ApolloServer = require('apollo-server-express').ApolloServer;
+const schema = require('../server/graphql/schema');
+const passport = require('passport');
+const cookieParser = require('cookie-parser');
+const initPassport = require('../lib/passport');
+const { buildContext } = require('graphql-passport');
+const cors = require('cors');
+const { v4 } = require('uuid');
+const dbConnect = require('../utils/dbConnect');
+const mongoose = require('mongoose')
+const MongoStore = require('connect-mongo')(session);
 
 app.prepare()
     .then(()=> {
+        dbConnect();
         const server = express();
 
         // Express Session Configuration
         const sessionConfig = {
-            secret: uid.sync(18),
+            genid: (req) => v4(),
+            store: new MongoStore({ mongooseConnection: mongoose.connection }),
+            secret: 'secret',
             cookie: {
                 maxAge: 1000 * 60 * 60 * 24 // 24 hours
             },
             name: 'sid',
             resave: false,
-            saveUninitialized: true
+            saveUninitialized: false,
         };
+
+        initPassport();
+
+        const corsOptions = {
+            origin: ['http://localhost:3000'],
+            credentials: true,
+        };
+        server.use(cors(corsOptions));
+        
+        server.use(cookieParser());
         server.use(session(sessionConfig));
+
+        server.use(passport.initialize());
+        server.use(passport.session());
 
         // Setup Apollo Server
         const apollo = new ApolloServer({
             schema,
-            context: ({ req, res }) => ({ req, res }),
+            context: ({ req, res }) => buildContext({ req, res }),
+            playground: {
+                settings: {
+                  'request.credentials': 'same-origin',
+                },
+            },
         });
 
         apollo.applyMiddleware({
             app: server,
-            path: '/api/graphql'
+            path: '/api/graphql',
+            cors: false
         });
 
         server.get('*', (req, res) => {

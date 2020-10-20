@@ -1,10 +1,7 @@
 const User = require('../models/user.model');
-const dbConnect = require('../../utils/dbConnect');
 const argon2 = require('argon2');
 const AuthenticationError = require('apollo-server-express').AuthenticationError;
 const Dream = require('../models/dream.model')
-
-dbConnect();
 
 const resolvers = {
     Query: {
@@ -19,7 +16,7 @@ const resolvers = {
         },
         user: async (_parent, {username}, _context)=> {
             try {
-                const user = User.findOne({username}).select('username fullname photo verified followers following')
+                const user = User.findOne({username}).select('username fullname photo verified followers following');
 
                 return user;
             } catch (error) {
@@ -43,10 +40,31 @@ const resolvers = {
             } catch (error) {
                 throw error
             }
+        },
+        whoami: async (_parent, _params, _context) => {
+            try {
+                // get user from session
+                const user = _context.getUser();
+
+                return { user }
+
+            } catch (error) {
+                throw error
+            }
         }
     },
     Mutation: {
-        register: async (_parent, { fullname, username, email, password }, { res }) => {
+        login: async (_parent, { email, password }, _context) => {
+            const { user } = await _context.authenticate('graphql-local', {
+                email,
+                password
+            });
+
+            _context.login(user);
+
+            return { user: user }
+        },
+        register: async (_parent, { fullname, username, email, password }, { req, res }) => {
             try {
                 const user = await User.findOne({username})
 

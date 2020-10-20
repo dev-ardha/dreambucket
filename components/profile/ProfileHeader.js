@@ -2,10 +2,9 @@ import Styled from '@emotion/styled';
 import { HiCheckCircle } from 'react-icons/hi'
 import { HiOutlineBookOpen, HiOutlineStar, HiPhotograph } from 'react-icons/hi'
 
-function ProfileHeader({username, verified, dreams, tab, setTab}){
-
+function ProfileHeader({username, verified, dreams, tab, setTab, mypage, photo}){
     return(
-        <ProfileHeaderStyled>
+        <ProfileHeaderStyled photo={photo}>
             <div className="wallpaper">
             <div className="profile-wrapper">
                 <div className="profile-picture"></div>
@@ -19,7 +18,7 @@ function ProfileHeader({username, verified, dreams, tab, setTab}){
                 <li className={tab === 'dreams' ? 'active' : ''} onClick={()=> setTab('dreams')}><span className="tab-icon"><HiOutlineBookOpen/></span>My Dreams<span className="count">({dreams.length ? dreams.length : '0'})</span></li>
                 <li className={tab === 'achieved' ? 'active' : ''} onClick={()=> setTab('achieved')}><span className="tab-icon"><HiOutlineStar/></span>Achieved<span className="count">(0)</span></li>
                 <div className="tab-right">
-                    <span className="header-button create primary">+</span>
+                    { mypage ? <span className="header-button create primary">+</span> : '' }
                     <span className="header-button follow primary">Follow</span>
                 </div>
             </ul>
@@ -120,7 +119,7 @@ const ProfileHeaderStyled = Styled.div`
             height:170px;
             border-radius:50%;
             background-color:#f7f7f7;
-            background-image:url('https://i1.sndcdn.com/avatars-aKOTUjdyD5jcKMa9-tHWyyA-t200x200.jpg');
+            background-image:url('${props => props.photo}');
             background-size:cover;
             margin-bottom:10px;
             border: 5px solid #fff;
@@ -154,6 +153,22 @@ const ProfileHeaderStyled = Styled.div`
                 color:#fff;
                 padding: 5px;
                 background: #000000b0;
+            }
+        }
+    }
+
+    @media(max-width:800px){
+        height:480px;
+
+        .wallpaper{
+            width:100%;
+        }
+        .tabs{
+            padding: 0 16px;
+            justify-content:center;
+
+            .tab-right{
+                display:none;
             }
         }
     }

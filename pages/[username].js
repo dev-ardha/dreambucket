@@ -4,16 +4,15 @@ import Error from '../components/shared/Error'
 import StoryList from '../components/profile/StoryList'
 import ProfileHeader from '../components/profile/ProfileHeader';
 import Etalase from '../components/profile/Etalase'
-import { getUser, getDreamByUser } from '../lib/make-request'
+import { getUser, getDreamByUser } from '../utils/user'
 import { useEffect, useState, useContext } from 'react'
 import { HiPhotograph } from 'react-icons/hi'
 import { UserContext } from '../context/UserContext'
 
-function ProfilePage({username, verified, followers, following}){
+function ProfilePage({username, verified, followers, following, mypage, photo}){
     const [dreams, setDreams] = useState([]);
     const [tab, setTab] = useState('dreams');
     const value = useContext(UserContext)
-    console.log(value)
 
     useEffect(() => {
         getDreamByUser(username).then(({data}) => {
@@ -89,7 +88,7 @@ function ProfilePage({username, verified, followers, following}){
                 {
                     username  ? (
                         <>
-                            <ProfileHeader tab={tab} setTab={setTab} username={username} verified={verified} dreams={dreams}/>
+                            <ProfileHeader mypage={mypage} tab={tab} photo={photo} setTab={setTab} username={username} verified={verified} dreams={dreams}/>
                             <div className="profile-body">  
                                 <div className="page">
                                     <Etalase dreams={dreams} switchTabs={switchTabs}/>
@@ -130,21 +129,49 @@ function ProfilePage({username, verified, followers, following}){
     )
 }
 
-ProfilePage.getInitialProps = async ({ query: { username } }) => {
-    const { data } = await getUser(username);
+ProfilePage.getInitialProps = async ({ query: { username }, req } ) => {
+    try {
+        if(req.user){
+            if(req.user.username === username){
+                return {
+                    username: req.user.username,
+                    verified: req.user.verified,
+                    followers: req.user.followers,
+                    following: req.user.following,
+                    photo: req.user.photo,
+                    authenticate: true,
+                    mypage: true,
+                }
+            }
 
-    if(data.data.user){
-        const user = data.data.user;
+            const { data } = await getUser(username);
 
-        return{
-            username: user.username,
-            verified: user.verified,
-            followers: user.followers,
-            following: user.following
+            return {
+                username: data.data.user.username,
+                verified: data.data.user.verified,
+                followers: data.data.user.followers,
+                following: data.data.user.following,
+                photo: data.data.user.photo,
+                authenticate: true,
+                mypage: false,
+            }
         }
-    }else{
-        return{
-            username: undefined
+    } catch (error) {
+        const { data } = await getUser(username);
+
+        if(data.data.user){
+            return {
+                username: data.data.user.username,
+                verified: data.data.user.verified,
+                followers: data.data.user.followers,
+                following: data.data.user.following,
+                photo: data.data.user.photo,
+                authenticate: false,
+                mypage: false,
+            }
+        }
+        return {
+            user: undefined
         }
     }
 }
@@ -325,6 +352,27 @@ const ProfilePageStyled = Styled.div`
 
     @media (max-width: 1024px) {
         padding: 50px 60px;
+    }
+
+    @media (max-width: 800px) {
+        padding: 0;
+
+        .profile-body{
+            padding: 0 16px;
+
+            .page-row{
+                flex-direction:column;
+
+                .page-right{
+                    width: 100%;
+                    margin-top: 1rem;
+                }
+                
+                .page-left{
+                    width:100%;
+                }
+            }
+        }
     }
 `
 
